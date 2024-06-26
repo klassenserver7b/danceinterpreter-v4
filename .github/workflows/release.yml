@@ -15,25 +15,13 @@ env:
   BREW_TAP: jondot/homebrew-tap
 
 jobs:
-  publish-crate:
-    name: Publish Crate
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions-rs/toolchain@v1
-        with:
-            toolchain: stable
-            override: true
-      - uses: katyo/publish-crates@v2
-        with:
-            registry-token: ${{ secrets.CARGO_REGISTRY_TOKEN }}
   dist:
     name: Dist
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false # don't fail other jobs if one fails
       matrix:
-        build: [ x86_64-linux, aarch64-linux, x86_64-windows, x86_64-macos, aarch64-apple-darwin ]
+        build: [ x86_64-linux, aarch64-linux, x86_64-windows, x86_64-macos, aarch64-macos ]
         include:
           - build: x86_64-linux
             os: ubuntu-latest
