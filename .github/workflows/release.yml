@@ -109,11 +109,6 @@ jobs:
     needs: [ dist ]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout sources
-        uses: actions/checkout@v2
-        with:
-          submodules: false
-
       - uses: actions/download-artifact@v2
         # with:
         #   path: dist
@@ -143,7 +138,6 @@ jobs:
                   exe=".exe"
               fi
               pkgname=$PROJECT_NAME-$TAG-$platform
-              mkdir tmp/$pkgname
               mv bins-$platform/$BIN_NAME$exe dist/$pkgname
               chmod -R +x dist
           done
