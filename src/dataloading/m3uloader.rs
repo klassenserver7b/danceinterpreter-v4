@@ -4,15 +4,15 @@ use std::path::{Path, PathBuf};
 
 use url::Url;
 
-use crate::dataloading::tagreader::read_songinfo_from_file;
+use crate::dataloading::tagreader::read_song_info_from_file;
 use crate::model::SongInfo;
 
-pub fn load_tagdata_from_m3u(path: &Path) -> Result<Vec<SongInfo>> {
+pub fn load_tag_data_from_m3u(path: &Path) -> Result<Vec<SongInfo>> {
     let files = load_m3u_content_from_path(path)?;
     let mut songtags: Vec<SongInfo> = Vec::new();
 
     for file in files {
-        let tag = read_songinfo_from_file(&file).map_err(|e| {
+        let tag = read_song_info_from_file(&file).map_err(|e| {
             io::Error::new(io::ErrorKind::InvalidData, format!("Error reading tag from file: {}", e))
         })?;
         songtags.push(tag);
@@ -69,7 +69,7 @@ fn url_decode(url: &str) -> String {
 mod tests {
     use std::path::Path;
 
-    use crate::dataloading::m3uloader::{load_m3u_content_from_path, load_tagdata_from_m3u};
+    use crate::dataloading::m3uloader::{load_m3u_content_from_path, load_tag_data_from_m3u};
     use crate::test_file;
 
     #[test]
@@ -84,7 +84,7 @@ mod tests {
 
     #[test]
     fn m3u_files_id3_tag_loading() {
-        let result = load_tagdata_from_m3u(Path::new(test_file!("id3_read_test.m3u")));
+        let result = load_tag_data_from_m3u(Path::new(test_file!("id3_read_test.m3u")));
         assert!(result.is_ok());
         let res = result.unwrap()[0].clone();
         assert_eq!(res.title, "Sine Test");
