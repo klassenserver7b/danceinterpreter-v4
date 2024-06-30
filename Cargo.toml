@@ -4,9 +4,13 @@ description = "Danceinterpreter v4"
 license = "GPL-3.0-or-later"
 version = "0.0.1"
 edition = "2021"
+build = "build.rs"
 authors = ["Klassenserver7b <klassenserver7bwin10@gmail.com>", "Konsl <82901383+Konsl@users.noreply.github.com>, Robocraft999 <59525378+Robocraft999@users.noreply.github.com>"]
 
 [dependencies]
 id3 = "1.13.1"
 url = "2.5.2"
 slint = "1.6.0"
+
+[build-dependencies]
+slint-build = "1.6.0"

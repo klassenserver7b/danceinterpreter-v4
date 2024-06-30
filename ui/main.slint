@@ -1,0 +1,21 @@
+import { TabWidget } from "std-widgets.slint";
+
+export component Test inherits Window {
+    height: 500px;
+    width: 500px;
+    Rectangle {
+        theTabWidget := TabWidget {
+            width: parent.width;
+            Tab {
+                title: "First";
+                Rectangle { 
+                    background: orange;
+                }
+            }
+            Tab {
+                title: "Second";
+                Rectangle { background: pink; }
+            }
+        }
+    }
+}
