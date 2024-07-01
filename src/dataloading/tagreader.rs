@@ -11,10 +11,10 @@ pub fn read_song_info_from_file(file: &Path) -> Result<SongInfo> {
 
     let album_art = tag.pictures()
         // use front cover if available
-        .filter(|pic| pic.picture_type == PictureType::CoverFront).next()
+        .find(|pic| pic.picture_type == PictureType::CoverFront)
         // otherwise try to use any picture
         .or(tag.pictures().next())
-        .map(|pic| pic.clone());
+        .cloned();
 
     Ok(SongInfo::new(
         tag.title().unwrap_or("").to_string(),
