@@ -43,6 +43,10 @@ impl<'a, Item> Iterator for VectorForwardBackward<'a, Item> {
         self.index += 1;
         res
     }
+
+    fn nth(&mut self, n: usize) -> Option<Self::Item> {
+        self.at_index(n)
+    }
 }
 
 impl<'a, Item> ForwardBackwardIterator for VectorForwardBackward<'a, Item> {
@@ -76,5 +80,6 @@ mod tests {
         assert_eq!(prov.prev(), songs.get(1));
         assert_eq!(prov.current(), songs.get(1));
         assert_eq!(prov.at_index(2), songs.get(2));
+        assert_eq!(prov.nth(1), songs.get(1));
     }
 }

@@ -1,3 +1,3 @@
 pub mod m3uloader;
-mod tagreader;
+mod id3tagreader;
 mod dataprovider;

@@ -40,6 +40,7 @@ name = "danceinterpreter-v4"
 version = "0.0.1"
 dependencies = [
  "id3",
+ "percent-encoding",
  "url",
 ]
 
