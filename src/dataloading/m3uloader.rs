@@ -1,10 +1,10 @@
 use std::io;
 use std::io::Result;
 use std::path::{Path, PathBuf};
-
+use percent_encoding::percent_decode_str;
 use url::Url;
 
-use crate::dataloading::tagreader::read_song_info_from_file;
+use crate::dataloading::id3tagreader::read_song_info_from_file;
 use crate::model::SongInfo;
 
 pub fn load_tag_data_from_m3u(path: &Path) -> Result<Vec<SongInfo>> {
@@ -23,17 +23,18 @@ pub fn load_tag_data_from_m3u(path: &Path) -> Result<Vec<SongInfo>> {
 
 
 fn load_m3u_content_from_path(path: &Path) -> Result<Vec<PathBuf>> {
-    let m3u_file = std::fs::read_to_string(path)?;
+    let m3u_content = std::fs::read_to_string(path)?;
+    let root = path.parent().unwrap();
 
-    let entries = m3u_file.split('\n')
+    let entries = m3u_content.lines()
         .filter(|x| !x.starts_with('#'));
 
     let absolute_paths = entries
-        .map(|entry| parse_file_uri(entry).unwrap_or(parse_relative_uri(entry)))
-        .map(|entry| path.parent().unwrap().join(entry));
+        .map(|entry| parse_file_uri(entry).unwrap_or(parse_encoded_file_name(entry)))
+        .map(|entry| root.join(entry));
 
     let accessible_files = absolute_paths
-        .filter(|path| path.exists());
+        .filter(|entry| entry.exists());
 
     Ok(accessible_files.collect::<Vec<PathBuf>>())
 }
@@ -43,25 +44,8 @@ fn parse_file_uri(uri: &str) -> Option<PathBuf> {
     uri.to_file_path().ok()
 }
 
-fn parse_relative_uri(uri: &str) -> PathBuf {
-    PathBuf::from(url_decode(uri))
-}
-
-fn url_decode(url: &str) -> String {
-    let mut decoded = String::from("");
-    let mut iter = url.chars();
-
-    while let Some(c) = iter.next() {
-        decoded.push(
-            if c == '%' {
-                let byte = u8::from_str_radix(format!("{}{}", iter.next().unwrap(), iter.next().unwrap()).as_str(), 16).unwrap();
-                byte as char
-            } else {
-                c
-            }
-        );
-    }
-    decoded
+fn parse_encoded_file_name(file: &str) -> PathBuf {
+    PathBuf::from(percent_decode_str(file).decode_utf8_lossy().to_string())
 }
 
 #[cfg(test)]
