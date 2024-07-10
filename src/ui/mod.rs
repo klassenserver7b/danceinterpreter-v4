@@ -1,3 +1,6 @@
+pub mod menu_bar;
+pub mod gif_paintable;
+
 use crate::model::SongInfo;
 
 pub trait SongViewer {
