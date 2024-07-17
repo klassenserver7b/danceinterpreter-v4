@@ -1,7 +1,9 @@
+use crate::model::SongInfo;
+
+pub mod ui_manager;
+pub mod config_window;
 pub mod menu_bar;
 pub mod gif_paintable;
-
-use crate::model::SongInfo;
 
 pub trait SongViewer {
     fn display_song(&self, song: SongInfo);

@@ -66,7 +66,6 @@ mod tests {
 
     use super::playlist_dataprovider::PlaylistDataProvider;
 
-
     #[test]
     fn test_playlist_dataprovider(){
         let songs = vec![
@@ -75,7 +74,7 @@ mod tests {
             SongInfo::new(String::from("T2"), String::from("A2"), String::from("D2"), None)
         ];
         let mut prov: PlaylistDataProvider = PlaylistDataProvider::new(&songs);
-        assert_eq!(prov.next(), songs.get(0));
+        assert_eq!(prov.next(), songs.first());
         println!("{:?}", prov.next());
         assert_eq!(prov.prev(), songs.get(1));
         assert_eq!(prov.current(), songs.get(1));

@@ -1,10 +1,12 @@
+use std::io::Cursor;
+
+use gtk::{gdk, glib, prelude::*, subclass::prelude::*};
+use image::{AnimationDecoder, codecs::gif::GifDecoder};
+
+use frame::Frame;
+
 mod frame;
 mod imp;
-
-use std::io::Cursor;
-use frame::Frame;
-use gtk::{gdk, glib, prelude::*, subclass::prelude::*};
-use image::{codecs::gif::GifDecoder, AnimationDecoder};
 
 glib::wrapper! {
     pub struct GifPaintable(ObjectSubclass<imp::GifPaintable>) @implements gdk::Paintable;
@@ -80,7 +82,8 @@ impl GifPaintable {
         // setup a callback to this function once the frame has finished so that
         // we can play the next frame
         let update_next_frame_callback = glib::clone!(
-            @weak self as paintable => move || {
+            #[weak(rename_to = paintable)] self,
+            move || {
                 paintable.imp().timeout_source_id.take();
                 paintable.setup_next_frame();
             }

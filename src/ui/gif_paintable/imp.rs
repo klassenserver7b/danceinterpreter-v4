@@ -22,19 +22,19 @@ impl ObjectSubclass for GifPaintable {
 impl ObjectImpl for GifPaintable {}
 
 impl PaintableImpl for GifPaintable {
-    fn intrinsic_height(&self) -> i32 {
-        self.next_frame
-            .borrow()
-            .as_ref()
-            .map(|texture| texture.height())
-            .unwrap_or(-1)
-    }
-
     fn intrinsic_width(&self) -> i32 {
         self.next_frame
             .borrow()
             .as_ref()
             .map(|texture| texture.width())
+            .unwrap_or(-1)
+    }
+
+    fn intrinsic_height(&self) -> i32 {
+        self.next_frame
+            .borrow()
+            .as_ref()
+            .map(|texture| texture.height())
             .unwrap_or(-1)
     }
 
