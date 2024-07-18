@@ -1,26 +1,29 @@
 pub mod playlist_dataprovider;
 
-pub trait ForwardBackwardIterator : Iterator {
+pub trait ForwardBackwardIterator: Iterator {
     #[allow(dead_code)]
     fn prev(&mut self) -> Option<Self::Item>;
 }
 
-pub struct VectorForwardBackward<'a, Item> where Item : 'a {
+pub struct VectorForwardBackward<'a, Item>
+where
+    Item: 'a,
+{
     pub index: usize,
-    pub vec: &'a Vec<Item>
+    pub vec: &'a Vec<Item>,
 }
 
 impl<'a, Item> VectorForwardBackward<'a, Item> {
     #[allow(dead_code)]
-    fn new(vec: &'a Vec<Item>) -> Self{
-        Self{
+    pub fn new(vec: &'a Vec<Item>) -> Self {
+        Self {
             vec,
-            index: 0
+            index: 0,
         }
     }
 
     #[allow(dead_code)]
-    pub fn current(&self) -> Option<&'a Item>{
+    pub fn current(&self) -> Option<&'a Item> {
         self.vec.get(self.index)
     }
 
@@ -54,7 +57,7 @@ impl<'a, Item> ForwardBackwardIterator for VectorForwardBackward<'a, Item> {
         if self.index == 0 {
             return None;
         }
-        
+
         self.index -= 1;
         self.vec.get(self.index)
     }
@@ -67,11 +70,11 @@ mod tests {
     use super::playlist_dataprovider::PlaylistDataProvider;
 
     #[test]
-    fn test_playlist_dataprovider(){
+    fn test_playlist_dataprovider() {
         let songs = vec![
             SongInfo::new(String::from("T0"), String::from("A0"), String::from("D0"), None),
             SongInfo::new(String::from("T1"), String::from("A1"), String::from("D1"), None),
-            SongInfo::new(String::from("T2"), String::from("A2"), String::from("D2"), None)
+            SongInfo::new(String::from("T2"), String::from("A2"), String::from("D2"), None),
         ];
         let mut prov: PlaylistDataProvider = PlaylistDataProvider::new(&songs);
         assert_eq!(prov.next(), songs.first());

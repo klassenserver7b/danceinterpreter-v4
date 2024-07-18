@@ -3,6 +3,9 @@ use gtk::gio::{ActionEntry, Menu, SimpleAction};
 use gtk::glib::clone;
 use gtk::prelude::*;
 
+use crate::dataloading::dataprovider::playlist_dataprovider::PlaylistDataProvider;
+use crate::dataloading::m3uloader::load_tag_data_from_m3u;
+
 pub fn create_menubar(app: &Application) {
     let file_menu = Menu::new();
     file_menu.append(Some("Open Playlist"), Some("app.menu_file_open_m3u"));
@@ -130,6 +133,7 @@ fn handle_file_open_m3u(app: &Application) {
                 if let Ok(file) = file {
                     let filename = file.path().expect("Couldn't get file path");
                     println!("Selected file: {}", filename.display());
+                    let playlist_data_provider: PlaylistDataProvider = PlaylistDataProvider::new(&load_tag_data_from_m3u(&filename).unwrap());
                 }
             },
         );
