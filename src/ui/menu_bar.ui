@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+    <menu id="menu_bar">
+        <submenu>
+            <attribute name="label">File</attribute>
+            <section>
+                <item>
+                    <attribute name="label">Open Playlist</attribute>
+                    <attribute name="action">app.menu_file_open_m3u</attribute>
+                </item>
+                <item>
+                    <attribute name="label">Exit</attribute>
+                    <attribute name="action">app.menu_file_exit</attribute>
+                </item>
+                <item>
+                    <attribute name="label">Test</attribute>
+                    <attribute name="action">app.menu_file_test</attribute>
+                </item>
+            </section>
+        </submenu>
+        <submenu>
+            <attribute name="label">Edit</attribute>
+            <section>
+                <item>
+                    <attribute name="label">Export Playlistview</attribute>
+                </item>
+                <item>
+                    <attribute name="label">Import Playlistview</attribute>
+                </item>
+                <item>
+                    <attribute name="label">Enable Playlistview</attribute>
+                    <attribute name="action">app.menu_edit_playlistview_switch</attribute>
+                </item>
+            </section>
+        </submenu>
+        <submenu>
+            <attribute name="label">View</attribute>
+            <section>
+                <item>
+                    <attribute name="label">Show Gif in ConfigWindow</attribute>
+                    <attribute name="action">app.menu_view_gif_switch</attribute>
+                </item>
+                <item>
+                    <attribute name="label">Enable DarkMode</attribute>
+                    <attribute name="action">app.menu_view_darkmode_switch</attribute>
+                </item>
+            </section>
+        </submenu>
+        <submenu>
+            <attribute name="label">Song Window</attribute>
+            <section>
+                <item>
+                    <attribute name="label">Show SongWindow</attribute>
+                    <attribute name="action">app.menu_songwindow_show_switch</attribute>
+                </item>
+                <item>
+                    <attribute name="label">Refresh</attribute>
+                </item>
+                <item>
+                    <attribute name="label">Show Thumbnails</attribute>
+                    <attribute name="action">app.menu_songwindow_thumbnail_switch</attribute>
+                </item>
+                <item>
+                    <attribute name="label">Show Next Dance</attribute>
+                    <attribute name="action">app.menu_songwindow_nextdance_switch</attribute>
+                </item>
+            </section>
+        </submenu>
+    </menu>
+</interface>

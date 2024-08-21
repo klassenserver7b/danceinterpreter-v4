@@ -1,0 +1,22 @@
+.sw_dance_label {
+    font-size: 12.5em;
+}
+.sw_title_label {
+    font-size: 5em;
+}
+
+.sw_next_dance_label {
+    font-size: 5em;
+}
+
+.sw_artist_label {
+    font-size: 4em;
+}
+
+grid {
+    border: red 1px solid;
+}
+
+label {
+    border: aquamarine 1px solid;
+}

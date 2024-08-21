@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<interface>
+    <object class="GtkApplicationWindow" id="config_window">
+        <property name="title" translatable="yes">Config Window - danceinterpreter</property>
+        <property name="default-width">1920</property>
+        <property name="default-height">1080</property>
+        <property name="startup-id">ConfigWindow</property>
+        <property name="show-menubar">true</property>
+        <child>
+            <object class="GtkCenterBox" id="cw_gcenter">
+                <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+            </object>
+        </child>
+    </object>
+</interface>

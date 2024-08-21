@@ -1,7 +1,7 @@
 use std::io::Cursor;
 
 use gtk::{gdk, glib, prelude::*, subclass::prelude::*};
-use image::{AnimationDecoder, codecs::gif::GifDecoder};
+use image::{codecs::gif::GifDecoder, AnimationDecoder};
 
 use frame::Frame;
 

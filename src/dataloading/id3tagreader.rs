@@ -1,8 +1,8 @@
 use std::path::Path;
 
-use id3::{Tag, TagLike};
 use id3::frame::PictureType;
 use id3::Result;
+use id3::{Tag, TagLike};
 
 use crate::model::SongInfo;
 
