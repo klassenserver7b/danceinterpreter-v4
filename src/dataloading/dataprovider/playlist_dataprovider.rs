@@ -89,9 +89,9 @@ mod tests {
     #[test]
     fn test_playlist_dataprovider() {
         let songs = vec![
-            SongInfo::new(String::from("T0"), String::from("A0"), String::from("D0"), None),
-            SongInfo::new(String::from("T1"), String::from("A1"), String::from("D1"), None),
-            SongInfo::new(String::from("T2"), String::from("A2"), String::from("D2"), None),
+            SongInfo::new(0,String::from("T0"), String::from("A0"), String::from("D0"), None),
+            SongInfo::new(0,String::from("T1"), String::from("A1"), String::from("D1"), None),
+            SongInfo::new(0, String::from("T2"), String::from("A2"), String::from("D2"), None),
         ];
         let mut prov: PlaylistDataProvider = PlaylistDataProvider::new(songs.clone(), Rc::new(UIManager::new(&Application::builder().build())));
         assert_eq!(prov.current(), songs.first());
