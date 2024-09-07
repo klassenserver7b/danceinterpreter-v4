@@ -16,12 +16,13 @@ impl PlaylistDataProvider {
         Self {
             vec,
             index: 0,
-            empty_song_info: SongInfo {
-                title: String::new(),
-                artist: String::new(),
-                dance: String::new(),
-                album_art: None,
-            },
+            empty_song_info: SongInfo::new(
+                0,
+                String::new(),
+                String::new(),
+                String::new(),
+                None
+            ),
             ui_manager,
         }
     }
@@ -37,10 +38,11 @@ impl PlaylistDataProvider {
             .unwrap_or(&self.empty_song_info);
 
         let next_dance = self.vec.get(self.index + 1)
-            .map(|next_info| next_info.dance.as_str())
-            .unwrap_or("");
+            .map(|next_info| next_info.dance())
+            .unwrap_or_default();
 
-        self.ui_manager.set_song_info(current_song, next_dance);
+        self.ui_manager.set_song_info(current_song, next_dance.as_str());
+        self.ui_manager.set_song_list(&self.vec);
     }
 
     pub fn current(&self) -> Option<&SongInfo> {

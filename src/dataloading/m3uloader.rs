@@ -5,7 +5,7 @@ use std::path::{Path, PathBuf};
 use percent_encoding::percent_decode_str;
 use url::Url;
 
-use crate::dataloading::id3tagreader::read_song_info_from_file;
+use crate::dataloading::id3tagreader::read_song_info_from_filepath;
 use crate::model::SongInfo;
 
 pub fn load_tag_data_from_m3u(path: &Path) -> Result<Vec<SongInfo>> {
@@ -13,7 +13,7 @@ pub fn load_tag_data_from_m3u(path: &Path) -> Result<Vec<SongInfo>> {
     let mut songtags: Vec<SongInfo> = Vec::new();
 
     for file in files {
-        let tag = read_song_info_from_file(&file).map_err(|e| {
+        let tag = read_song_info_from_filepath(&file).map_err(|e| {
             io::Error::new(io::ErrorKind::InvalidData, format!("Error reading tag from file: {}", e))
         })?;
         songtags.push(tag);
@@ -72,8 +72,8 @@ mod tests {
         let result = load_tag_data_from_m3u(Path::new(test_file!("id3_read_test.m3u")));
         assert!(result.is_ok());
         let res = result.unwrap()[0].clone();
-        assert_eq!(res.title, "Sine Test");
-        assert_eq!(res.artist, "K7");
-        assert_eq!(res.dance, "Test Dance");
+        assert_eq!(res.title().as_str(), "Sine Test");
+        assert_eq!(res.artist().as_str(), "K7");
+        assert_eq!(res.dance().as_str(), "Test Dance");
     }
 }

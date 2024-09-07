@@ -7,8 +7,140 @@
         <property name="startup-id">ConfigWindow</property>
         <property name="show-menubar">true</property>
         <child>
-            <object class="GtkCenterBox" id="cw_gcenter">
+            <object class="GtkBox">
                 <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+                <child>
+                    <object class="GtkBox" id="tb_dances">
+                        <property name="accessible-role">toolbar</property>
+                        <property name="css-classes">toolbar</property>
+                        <accessibility>
+                            <property name="label">Toolbar</property>
+                        </accessibility>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkColumnView" id="tracks_view">
+                        <style>
+                            <class name="rich-list"/>
+                        </style>
+                        <property name="vexpand">true</property>
+                        <property name="valign">GTK_ALIGN_FILL</property>
+                        <property name="model">
+                            <object class="GtkNoSelection" id="sel_tracks">
+                                <property name="model">
+                                    <object class="GListStore" id="ls_tracks"/>
+                                </property>
+                            </object>
+                        </property>
+                        <child>
+                            <object class="GtkColumnViewColumn">
+                                <property name="title" translatable="yes">#</property>
+                                <property name="factory">
+                                    <object class="GtkBuilderListItemFactory">
+                                        <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkColumnViewCell">
+    <property name="child">
+      <object class="GtkLabel">
+        <property name="xalign">0</property>
+        <binding name="label">
+          <lookup name="track_number" type="SongInfo">
+            <lookup name="item">GtkColumnViewCell</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>
+                        ]]></property>
+                                    </object>
+                                </property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkColumnViewColumn">
+                                <property name="title" translatable="yes">Title</property>
+                                <property name="expand">1</property>
+                                <property name="factory">
+                                    <object class="GtkBuilderListItemFactory">
+                                        <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkColumnViewCell">
+    <property name="child">
+      <object class="GtkEditableLabel">
+        <property name="xalign">0</property>
+        <binding name="text">
+          <lookup name="title" type="SongInfo">
+            <lookup name="item">GtkColumnViewCell</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>
+                        ]]></property>
+                                    </object>
+                                </property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkColumnViewColumn">
+                                <property name="title" translatable="yes">Artist</property>
+                                <property name="expand">1</property>
+                                <property name="factory">
+                                    <object class="GtkBuilderListItemFactory">
+                                        <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkColumnViewCell">
+    <property name="child">
+      <object class="GtkEditableLabel">
+        <property name="xalign">0</property>
+        <binding name="text">
+          <lookup name="artist" type="SongInfo">
+            <lookup name="item">GtkColumnViewCell</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>
+                        ]]></property>
+                                    </object>
+                                </property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkColumnViewColumn">
+                                <property name="title" translatable="yes">Dance</property>
+                                <property name="expand">1</property>
+                                <property name="factory">
+                                    <object class="GtkBuilderListItemFactory">
+                                        <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkColumnViewCell">
+    <property name="child">
+      <object class="GtkEditableLabel">
+        <property name="xalign">0</property>
+        <binding name="text">
+          <lookup name="dance" type="SongInfo">
+            <lookup name="item">GtkColumnViewCell</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>
+                        ]]></property>
+                                    </object>
+                                </property>
+                            </object>
+                        </child>
+                    </object>
+                </child>
             </object>
         </child>
     </object>

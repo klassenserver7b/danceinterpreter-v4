@@ -4,7 +4,7 @@ use crate::ui::config_window::ConfigWindow;
 use crate::ui::switch_action::SwitchAction;
 use crate::ui::ui_manager::UIManager;
 use gtk::gio::{ActionEntry, SimpleAction};
-use gtk::prelude::{ActionExt, ActionMapExt, ActionMapExtManual, ApplicationExt, FileExt, GtkApplicationExt, GtkWindowExt, ToVariant, WidgetExt};
+use gtk::prelude::{ActionExt, ActionMapExt, ActionMapExtManual, ApplicationExt, FileExt, GtkApplicationExt, ToVariant, WidgetExt};
 use gtk::{gio, glib, Application, FileDialog, Switch};
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -146,7 +146,7 @@ fn handle_file_open_m3u(app: &Application, data_provider: Rc<RefCell<PlaylistDat
         );
 }
 
-fn handle_edit_playlistview_switch_action(_state: bool, data_provider: Rc<RefCell<PlaylistDataProvider>>) {
+fn handle_edit_playlistview_switch_action(_state: bool, _data_provider: Rc<RefCell<PlaylistDataProvider>>) {
     
     
     

@@ -25,6 +25,10 @@ impl UIManager {
     pub fn set_song_info(&self, song_info: &SongInfo, next_dance: &str) {
         self.song_window.set_song_info(song_info, next_dance);
     }
+    
+    pub fn set_song_list(&self, song_list: &Vec<SongInfo>) {
+        self.config_window.set_song_list(song_list);
+    }
 
     pub fn get_config_window(&self) -> &ConfigWindow {
         &self.config_window

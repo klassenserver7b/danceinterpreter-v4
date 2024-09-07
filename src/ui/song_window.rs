@@ -1,9 +1,9 @@
 use crate::model::SongInfo;
 use gtk::gdk::{Display, Texture};
 use gtk::glib::Propagation::Stop;
-use gtk::glib::{closure_local, Bytes, ParamSpec};
+use gtk::glib::{closure_local, ParamSpec};
 use gtk::prelude::{ActionGroupExt, GtkWindowExt, ObjectExt, WidgetExt};
-use gtk::{glib, Align, Builder, Picture};
+use gtk::{glib, Builder, Picture};
 use gtk::{Application, ApplicationWindow, Label, STYLE_PROVIDER_PRIORITY_APPLICATION};
 use std::time::Duration;
 
@@ -40,13 +40,16 @@ impl SongWindow {
     }
 
     pub fn set_song_info(&self, song_info: &SongInfo, next_dance: &str) {
-        self.information_widgets.dance_label.set_text(&song_info.dance);
-        self.information_widgets.title_label.set_text(&song_info.title);
-        self.information_widgets.artist_label.set_text(&song_info.artist);
+        song_info.bind_property("dance", &self.information_widgets.dance_label, "label")
+            .build();
+        song_info.bind_property("artist", &self.information_widgets.artist_label, "label")
+            .build();
+        song_info.bind_property("title", &self.information_widgets.title_label, "label")
+            .build();
 
-        if let Some(picture_data) = &song_info.album_art {
+        if let Some(picture_data) = &song_info.album_art() {
             self.information_widgets.cover_picture.set_paintable(
-                Some(&Texture::from_bytes(&Bytes::from(&picture_data.data)).unwrap())
+                Some(&Texture::from_bytes(&picture_data).unwrap())
             );
         } else {
             self.information_widgets.cover_picture.set_paintable(None as Option<&Texture>);

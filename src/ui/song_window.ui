@@ -47,19 +47,6 @@
                                 </layout>
                             </object>
                         </child>
-                        <child>
-                            <object class="GtkPicture" id="picture_cover">
-                                <property name="content-fit">GTK_CONTENT_FIT_SCALE_DOWN</property>
-                                <property name="vexpand">false</property>
-                                <property name="height-request">200px</property>
-                                <layout>
-                                    <property name="column">0</property>
-                                    <property name="row">1</property>
-                                    <property name="column-span">1</property>
-                                    <property name="row-span">2</property>
-                                </layout>
-                            </object>
-                        </child>
                     </object>
                 </child>
                 <child type="end">
@@ -71,5 +58,16 @@
                 </child>
             </object>
         </child>
+    </object>
+    <object class="GtkPicture" id="picture_cover">
+        <property name="content-fit">GTK_CONTENT_FIT_SCALE_DOWN</property>
+        <property name="vexpand">false</property>
+        <property name="height-request">200px</property>
+        <layout>
+            <property name="column">0</property>
+            <property name="row">1</property>
+            <property name="column-span">1</property>
+            <property name="row-span">2</property>
+        </layout>
     </object>
 </interface>
