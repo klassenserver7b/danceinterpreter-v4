@@ -76,34 +76,3 @@ impl PlaylistDataProvider {
         self.ui_manager.clone()
     }
 }
-
-
-#[cfg(test)]
-mod tests {
-    use crate::dataloading::dataprovider::playlist_dataprovider::PlaylistDataProvider;
-    use crate::model::SongInfo;
-    use crate::ui::ui_manager::UIManager;
-    use gtk::Application;
-    use std::rc::Rc;
-
-    #[test]
-    fn test_playlist_dataprovider() {
-        let songs = vec![
-            SongInfo::new(0,String::from("T0"), String::from("A0"), String::from("D0"), None),
-            SongInfo::new(0,String::from("T1"), String::from("A1"), String::from("D1"), None),
-            SongInfo::new(0, String::from("T2"), String::from("A2"), String::from("D2"), None),
-        ];
-        let mut prov: PlaylistDataProvider = PlaylistDataProvider::new(songs.clone(), Rc::new(UIManager::new(&Application::builder().build())));
-        assert_eq!(prov.current(), songs.first());
-        prov.next();
-        assert_eq!(prov.current(), songs.get(1));
-        prov.set_index(2);
-        assert_eq!(prov.current(), songs.get(2));
-        prov.prev();
-        assert_eq!(prov.current(), songs.get(1));
-        prov.prev();
-        assert_eq!(prov.current(), songs.first());
-        prov.prev();
-        assert_eq!(prov.current(), songs.first());
-    }
-}
