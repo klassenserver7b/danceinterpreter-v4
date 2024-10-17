@@ -2,11 +2,10 @@ use std::io;
 use std::io::Result;
 use std::path::{Path, PathBuf};
 
+use crate::dataloading::id3tagreader::read_song_info_from_filepath;
+use crate::dataloading::songinfo::SongInfo;
 use percent_encoding::percent_decode_str;
 use url::Url;
-
-use crate::dataloading::id3tagreader::read_song_info_from_filepath;
-use crate::model::SongInfo;
 
 pub fn load_tag_data_from_m3u(path: &Path) -> Result<Vec<SongInfo>> {
     let files = load_m3u_content_from_path(path)?;
@@ -14,7 +13,10 @@ pub fn load_tag_data_from_m3u(path: &Path) -> Result<Vec<SongInfo>> {
 
     for file in files {
         let tag = read_song_info_from_filepath(&file).map_err(|e| {
-            io::Error::new(io::ErrorKind::InvalidData, format!("Error reading tag from file: {}", e))
+            io::Error::new(
+                io::ErrorKind::InvalidData,
+                format!("Error reading tag from file: {}", e),
+            )
         })?;
         songtags.push(tag);
     }
@@ -22,20 +24,17 @@ pub fn load_tag_data_from_m3u(path: &Path) -> Result<Vec<SongInfo>> {
     Ok(songtags)
 }
 
-
 fn load_m3u_content_from_path(path: &Path) -> Result<Vec<PathBuf>> {
     let m3u_content = std::fs::read_to_string(path)?;
     let root = path.parent().unwrap();
 
-    let entries = m3u_content.lines()
-        .filter(|x| !x.starts_with('#'));
+    let entries = m3u_content.lines().filter(|x| !x.starts_with('#'));
 
     let absolute_paths = entries
         .map(|entry| parse_file_uri(entry).unwrap_or(parse_encoded_file_name(entry)))
         .map(|entry| root.join(entry));
 
-    let accessible_files = absolute_paths
-        .filter(|entry| entry.exists());
+    let accessible_files = absolute_paths.filter(|entry| entry.exists());
 
     Ok(accessible_files.collect::<Vec<PathBuf>>())
 }
@@ -72,8 +71,8 @@ mod tests {
         let result = load_tag_data_from_m3u(Path::new(test_file!("id3_read_test.m3u")));
         assert!(result.is_ok());
         let res = result.unwrap()[0].clone();
-        assert_eq!(res.title().as_str(), "Sine Test");
-        assert_eq!(res.artist().as_str(), "K7");
-        assert_eq!(res.dance().as_str(), "Test Dance");
+        assert_eq!(res.title, "Sine Test");
+        assert_eq!(res.artist, "K7");
+        assert_eq!(res.dance, "Test Dance");
     }
 }

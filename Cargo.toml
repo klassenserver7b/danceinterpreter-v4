@@ -10,5 +10,5 @@ authors = ["Klassenserver7b <klassenserver7bwin10@gmail.com>", "Konsl <82901383+
 id3 = "1.13.1"
 url = "2.5.2"
 percent-encoding = "2.3.1"
-iced = { version = "0.13.1", package = "iced" , features = ["auto-detect-theme", "wgpu", "fira-sans", "tiny-skia", "svg", "image", "lazy", "async-std"] }
+iced = { version = "0.13.1", features = ["image", "default", "debug", "multi-window" , "svg", "lazy", "async-std"]}
 bytes = "1.7.1"
