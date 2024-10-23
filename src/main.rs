@@ -2,13 +2,16 @@ mod dataloading;
 mod macros;
 mod ui;
 
+use crate::dataloading::songinfo::SongInfo;
+use crate::ui::config_window::ConfigWindow;
 use crate::ui::song_window::SongWindow;
 use iced::widget::horizontal_space;
-use iced::{window, Element, Size, Subscription, Task};
+use iced::{window, Element, Size, Subscription, Task, Theme};
 use std::collections::BTreeMap;
 
 fn main() -> iced::Result {
     iced::daemon(Counter::title, Counter::update, Counter::view)
+        .theme(Counter::theme)
         .subscription(Counter::subscription)
         .run_with(Counter::new)
 }
@@ -18,11 +21,13 @@ pub trait Window {
     fn title(&self) -> String;
     fn update(&mut self, message: Message) -> Task<Message>;
     fn view(&self) -> Element<Message>;
+    fn theme(&self) -> Theme;
 }
 
 #[derive(Default)]
 struct Counter {
     windows: BTreeMap<window::Id, Box<dyn Window>>,
+    //global_state: GlobalState,
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -31,6 +36,8 @@ pub enum Message {
     Decrement,
     WindowOpened(window::Id),
     WindowResized((window::Id, Size)),
+
+    SongChanged,
 }
 
 impl Counter {
@@ -43,7 +50,10 @@ impl Counter {
         tasks.push(
             state.create_window(Box::new(SongWindow::default()), window::Settings::default()),
         );
-        // tasks.push(state.create_window((), window::Settings::default()));
+        tasks.push(state.create_window(
+            Box::new(ConfigWindow::default()),
+            window::Settings::default(),
+        ));
 
         (state, Task::batch(tasks))
     }
@@ -82,6 +92,13 @@ impl Counter {
             .collect();
 
         Task::batch(window_tasks)
+    }
+
+    fn theme(&self, window_id: window::Id) -> Theme {
+        self.windows
+            .get(&window_id)
+            .map(|w| w.theme())
+            .unwrap_or(Theme::Dark)
     }
 
     pub fn subscription(&self) -> Subscription<Message> {
