@@ -31,11 +31,10 @@ struct Counter {
 
 #[derive(Debug, Clone, Copy)]
 pub enum Message {
-    Increment,
-    Decrement,
     WindowOpened(window::Id),
     WindowResized((window::Id, Size)),
     OpenPlaylist,
+    Refresh,
     SongChanged,
 }
 
@@ -47,11 +46,14 @@ impl Counter {
         };
 
         tasks.push(
-            state.create_window(Box::new(SongWindow::default()), window::Settings::default()),
+            state.create_window(
+                Box::new(SongWindow::default()),
+                window::Settings::default()),
         );
-        tasks.push(state.create_window(
-            Box::new(ConfigWindow::default()),
-            window::Settings::default(),
+        tasks.push(
+            state.create_window(
+                Box::new(ConfigWindow::default()),
+                window::Settings::default(),
         ));
 
         (state, Task::batch(tasks))

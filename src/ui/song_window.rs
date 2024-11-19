@@ -1,5 +1,5 @@
-use crate::Window;
-use crate::{res_file, Message};
+use crate::res_file;
+use crate::{Message, Window};
 use iced::alignment::{Horizontal, Vertical};
 use iced::widget::text::LineHeight;
 use iced::widget::{column, image, row, stack, text};

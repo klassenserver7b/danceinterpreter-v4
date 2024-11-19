@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 use crate::{Message, Window};
 use iced::alignment::{Horizontal, Vertical};
-use iced::widget::{button, text};
+use iced::widget::{button, checkbox, text};
 use iced::{window, Element, Length, Size, Task, Theme};
 use iced_aw::menu::Item;
 use iced_aw::{menu_bar, menu_items, Menu};
@@ -44,7 +44,7 @@ impl Window for ConfigWindow {
                 .set_title("Select playlist file")
                 .set_directory(dirs::audio_dir().unwrap_or(dirs::home_dir().unwrap_or(PathBuf::from("."))))
                 .pick_file();
-            
+
             if file.is_some()  {
                 println!("Selected file: {:?}", file);
                 let playlist = load_tag_data_from_m3u(&file.unwrap());
@@ -72,7 +72,47 @@ impl Window for ConfigWindow {
                     ).padding([4, 8])
                     .width(Length::Fill)
                     .style(button::secondary))
-            ))));
+            )).spacing(5.0))
+            (button(
+                text("Edit").align_y(Vertical::Center)
+            ).padding([4, 8]).style(button::secondary),
+            menu_tpl_1(
+                menu_items!(
+                    (button(
+                        text("Import Playlistview").align_y(Vertical::Center).align_x(Horizontal::Left)
+                    ).padding([4, 8])
+                    .width(Length::Fill)
+                    .style(button::secondary))
+                (button(
+                        text("Export Playlistview").align_y(Vertical::Center).align_x(Horizontal::Left)
+                    ).padding([4, 8])
+                    .width(Length::Fill)
+                    .style(button::secondary))
+            )).spacing(5.0))
+            (button(
+                text("SongWindow").align_y(Vertical::Center)
+            ).padding([4, 8]).style(button::secondary),
+            menu_tpl_1(
+                menu_items!(
+                    (checkbox(
+                         "Show Thumbnails", true
+                        ).spacing(5.0)
+                        .width(Length::Fill)
+                        .style(checkbox::secondary))
+
+                    (checkbox(
+                         "Show Next Dance", true
+                        ).spacing(5.0)
+                        .width(Length::Fill)
+                        .style(checkbox::secondary))
+
+                     (button(
+                        text("Refresh").align_y(Vertical::Center).align_x(Horizontal::Left)
+                    ).padding([4, 8]).on_press(Message::Refresh)
+                    .width(Length::Fill)
+                    .style(button::secondary))
+            )).spacing(5.0))
+        ).spacing(5.0);
 
         mb.into()
     }
