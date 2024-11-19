@@ -1,6 +1,6 @@
 use iced::widget::image::Handle;
 
-#[derive(Default, Clone)]
+#[derive(Default, Clone, Debug)]
 pub struct SongInfo {
     pub track_number: u32,
     pub title: String,

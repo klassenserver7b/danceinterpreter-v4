@@ -2,7 +2,6 @@ mod dataloading;
 mod macros;
 mod ui;
 
-use crate::dataloading::songinfo::SongInfo;
 use crate::ui::config_window::ConfigWindow;
 use crate::ui::song_window::SongWindow;
 use iced::widget::horizontal_space;
@@ -36,7 +35,7 @@ pub enum Message {
     Decrement,
     WindowOpened(window::Id),
     WindowResized((window::Id, Size)),
-
+    OpenPlaylist,
     SongChanged,
 }
 

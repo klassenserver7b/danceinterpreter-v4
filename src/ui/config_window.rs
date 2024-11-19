@@ -1,8 +1,12 @@
-use iced_aw::menu::Item;
+use std::path::PathBuf;
 use crate::{Message, Window};
-use iced::widget::{button, horizontal_space, text};
-use iced::{alignment, window, Element, Length, Size, Task, Theme};
+use iced::alignment::{Horizontal, Vertical};
+use iced::widget::{button, text};
+use iced::{window, Element, Length, Size, Task, Theme};
+use iced_aw::menu::Item;
 use iced_aw::{menu_bar, menu_items, Menu};
+use rfd::FileDialog;
+use crate::dataloading::m3uloader::load_tag_data_from_m3u;
 
 #[derive(Default)]
 pub struct ConfigWindow {
@@ -32,21 +36,42 @@ impl Window for ConfigWindow {
             self.size = size;
         }
 
+        if let Message::OpenPlaylist = message {
+            // Open playlist file
+            let file = FileDialog::new()
+                .add_filter("Playlist", &["m3u", "m3u8"])
+                .add_filter("Any(*)", &["*"])
+                .set_title("Select playlist file")
+                .set_directory(dirs::audio_dir().unwrap_or(dirs::home_dir().unwrap_or(PathBuf::from("."))))
+                .pick_file();
+            
+            if file.is_some()  {
+                println!("Selected file: {:?}", file);
+                let playlist = load_tag_data_from_m3u(&file.unwrap());
+            }
+        }
+
         ().into()
     }
 
     fn view(&self) -> Element<Message> {
-        let menu_tpl_1 = |items| Menu::new(items).max_width(180.0).offset(15.0).spacing(5.0);
+        let menu_tpl_1 = |items| Menu::new(items).max_width(150.0).offset(15.0).spacing(5.0);
         let mb = menu_bar!(
             (button(
-                text("File").align_y(alignment::Vertical::Center)
-            ).padding([4, 8]).style(button::primary),
+                text("File").align_y(Vertical::Center)
+            ).padding([4, 8]).style(button::secondary),
             menu_tpl_1(
                 menu_items!(
-                (text("Open").align_y(alignment::Vertical::Center))
+                    (button(
+                        text("Open Playlist File").align_y(Vertical::Center).align_x(Horizontal::Left)
+                    ).padding([4, 8]).on_press(Message::OpenPlaylist)
+                    .width(Length::Fill)
+                    .style(button::secondary))
                 (button(
-                        text("Exit").align_y(alignment::Vertical::Center)
-                    ).padding([4, 8]).style(button::primary))
+                        text("Exit").align_y(Vertical::Center).align_x(Horizontal::Left)
+                    ).padding([4, 8])
+                    .width(Length::Fill)
+                    .style(button::secondary))
             ))));
 
         mb.into()

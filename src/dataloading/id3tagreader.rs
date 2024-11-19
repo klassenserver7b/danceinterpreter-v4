@@ -1,9 +1,9 @@
 use crate::dataloading::songinfo::SongInfo;
+use iced::widget::image::Handle;
 use id3::frame::PictureType;
 use id3::Result;
 use id3::{Tag, TagLike};
 use std::path::Path;
-use iced::widget::image::Handle;
 
 pub fn read_song_info_from_filepath(file: impl AsRef<Path>) -> Result<SongInfo> {
     let tag = Tag::read_from_path(file)?;
