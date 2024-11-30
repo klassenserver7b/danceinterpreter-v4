@@ -5,7 +5,7 @@ mod ui;
 use crate::ui::config_window::ConfigWindow;
 use crate::ui::song_window::SongWindow;
 use iced::widget::horizontal_space;
-use iced::{window, Element, Size, Subscription, Task, Theme};
+use iced::{exit, window, Element, Size, Subscription, Task, Theme};
 use std::collections::BTreeMap;
 
 fn main() -> iced::Result {
@@ -86,7 +86,12 @@ impl Counter {
     pub fn update(&mut self, message: Message) -> Task<Message> {
         if let Message::WindowClosed(closed_id) = message {
             self.windows.remove(&closed_id);
-            return Task::batch(self.windows.keys().map(window::close));
+
+            if self.windows.is_empty() {
+                return exit();
+            }
+
+            return Task::batch(self.windows.keys().map(|&id| window::close(id)));
         }
 
         let window_tasks: Vec<Task<Message>> = self
