@@ -33,6 +33,7 @@ struct Counter {
 pub enum Message {
     WindowOpened(window::Id),
     WindowResized((window::Id, Size)),
+    WindowClosed(window::Id),
     OpenPlaylist,
     Refresh,
     SongChanged,
@@ -46,14 +47,11 @@ impl Counter {
         };
 
         tasks.push(
-            state.create_window(
-                Box::new(SongWindow::default()),
-                window::Settings::default()),
+            state.create_window(Box::new(SongWindow::default()), window::Settings::default()),
         );
-        tasks.push(
-            state.create_window(
-                Box::new(ConfigWindow::default()),
-                window::Settings::default(),
+        tasks.push(state.create_window(
+            Box::new(ConfigWindow::default()),
+            window::Settings::default(),
         ));
 
         (state, Task::batch(tasks))
@@ -86,6 +84,11 @@ impl Counter {
     }
 
     pub fn update(&mut self, message: Message) -> Task<Message> {
+        if let Message::WindowClosed(closed_id) = message {
+            self.windows.remove(&closed_id);
+            return Task::batch(self.windows.keys().map(window::close));
+        }
+
         let window_tasks: Vec<Task<Message>> = self
             .windows
             .iter_mut()
@@ -103,6 +106,9 @@ impl Counter {
     }
 
     pub fn subscription(&self) -> Subscription<Message> {
-        window::resize_events().map(Message::WindowResized)
+        Subscription::batch([
+            window::close_events().map(Message::WindowClosed),
+            window::resize_events().map(Message::WindowResized),
+        ])
     }
 }
