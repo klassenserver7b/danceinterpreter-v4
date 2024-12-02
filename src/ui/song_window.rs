@@ -51,8 +51,8 @@ impl Window for SongWindow {
         let artist_size = self.size.height / 25.0;
         let next_dance_size = self.size.height / 20.0;
 
-        let dance_spacing = self.size.width / 7.0;
-        let song_spacing = self.size.width / 150.0;
+        let dance_spacing = self.size.height / 35.0;
+        let song_spacing = self.size.height / 150.0;
 
         let cover_height = LineHeight::default().to_absolute(title_size.into())
             + song_spacing
