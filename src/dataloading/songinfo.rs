@@ -1,4 +1,4 @@
-use iced::widget::image::Handle;
+use iced::widget::image;
 
 #[derive(Default, Clone, Debug)]
 pub struct SongInfo {
@@ -6,7 +6,7 @@ pub struct SongInfo {
     pub title: String,
     pub artist: String,
     pub dance: String,
-    pub album_art: Option<Handle>,
+    pub album_art: Option<image::Handle>,
 }
 
 impl SongInfo {
@@ -15,7 +15,7 @@ impl SongInfo {
         title: String,
         artist: String,
         dance: String,
-        album_art: Option<Handle>,
+        album_art: Option<image::Handle>,
     ) -> Self {
         SongInfo {
             track_number,
