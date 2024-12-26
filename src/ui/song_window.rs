@@ -1,14 +1,24 @@
-use crate::res_file;
-use crate::{Message, Window};
+use crate::{DanceInterpreter, Message};
+use crate::Window;
 use iced::alignment::{Horizontal, Vertical};
 use iced::widget::text::LineHeight;
-use iced::widget::{column, image, row, stack, text};
+use iced::widget::{column, horizontal_space, image, row, stack, Text};
 use iced::Size;
-use iced::{window, Element, Length, Task, Theme};
+use iced::{window, Element, Length};
 
 pub struct SongWindow {
-    id: Option<window::Id>,
-    size: Size,
+    pub id: Option<window::Id>,
+    pub size: Size,
+}
+
+impl Window for SongWindow {
+    fn on_create(&mut self, id: window::Id) {
+        self.id = Some(id);
+    }
+
+    fn on_resize(&mut self, size: Size) {
+        self.size = size;
+    }
 }
 
 impl Default for SongWindow {
@@ -20,32 +30,12 @@ impl Default for SongWindow {
     }
 }
 
-impl Window for SongWindow {
-    fn set_id(&mut self, id: window::Id) {
-        self.id = Some(id);
-    }
-
-    fn title(&self) -> String {
-        "Song Window".to_owned()
-    }
-
-    fn update(&mut self, message: Message) -> Task<Message> {
-        let Some(id) = self.id else {
-            return ().into();
+impl SongWindow {
+    pub fn view(&self, state: &DanceInterpreter) -> Element<Message> {
+        let Some(song_info) = state.song_info.as_ref() else {
+            return horizontal_space().into();
         };
 
-        if let Message::WindowResized((ev_id, size)) = message {
-            if ev_id != id {
-                return ().into();
-            };
-
-            self.size = size.max(Size::new(1.0, 1.0));
-        }
-
-        ().into()
-    }
-
-    fn view(&self) -> Element<Message> {
         let dance_size = self.size.height / 8.0;
         let title_size = self.size.height / 20.0;
         let artist_size = self.size.height / 25.0;
@@ -58,20 +48,20 @@ impl Window for SongWindow {
             + song_spacing
             + LineHeight::default().to_absolute(artist_size.into());
 
-        let text_dance = text!("Gourmetta")
+        let text_dance = Text::new(song_info.dance.to_owned())
             .size(dance_size)
             .height(Length::Fill)
             .align_y(Vertical::Bottom);
 
         let column_title_artist = column![
-            text!("Der DJ aus den Bergen").size(title_size),
-            text!("DJ Ötzi").size(artist_size),
+            Text::new(song_info.title.to_owned()).size(title_size),
+            Text::new(song_info.artist.to_owned()).size(artist_size),
         ]
         .spacing(song_spacing);
 
-        let row_bottom = (if true {
+        let row_bottom = (if let Some(image_handle) = song_info.album_art.as_ref() {
             row![
-                image(res_file!("icon.jpg")).height(cover_height),
+                image(image_handle).height(cover_height),
                 column_title_artist
             ]
         } else {
@@ -87,10 +77,10 @@ impl Window for SongWindow {
             .align_x(Horizontal::Center)
             .spacing(dance_spacing);
 
-        (if true {
+        (if let Some(next_song_info) = state.next_song_info.as_ref() {
             stack![
                 column_center,
-                text!("Absturz")
+                Text::new(next_song_info.dance.to_owned())
                     .size(next_dance_size)
                     .width(Length::Fill)
                     .height(Length::Fill)
@@ -103,9 +93,5 @@ impl Window for SongWindow {
         .width(Length::Fill)
         .height(Length::Fill)
         .into()
-    }
-
-    fn theme(&self) -> Theme {
-        Theme::Dark
     }
 }

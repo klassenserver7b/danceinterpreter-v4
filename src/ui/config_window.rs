@@ -1,60 +1,28 @@
-use std::path::PathBuf;
-use crate::{Message, Window};
+use crate::{DanceInterpreter, Message, Window};
 use iced::alignment::{Horizontal, Vertical};
 use iced::widget::{button, checkbox, text};
-use iced::{window, Element, Length, Size, Task, Theme};
+use iced::{window, Element, Length, Size};
 use iced_aw::menu::Item;
 use iced_aw::{menu_bar, menu_items, Menu};
-use rfd::FileDialog;
-use crate::dataloading::m3uloader::load_tag_data_from_m3u;
 
 #[derive(Default)]
 pub struct ConfigWindow {
-    id: Option<window::Id>,
-    size: Size,
+    pub id: Option<window::Id>,
+    pub size: Size,
 }
 
 impl Window for ConfigWindow {
-    fn set_id(&mut self, id: window::Id) {
+    fn on_create(&mut self, id: window::Id) {
         self.id = Some(id);
     }
 
-    fn title(&self) -> String {
-        "Config Window".to_owned()
+    fn on_resize(&mut self, size: Size) {
+        self.size = size;
     }
+}
 
-    fn update(&mut self, message: Message) -> Task<Message> {
-        let Some(id) = self.id else {
-            return ().into();
-        };
-
-        if let Message::WindowResized((ev_id, size)) = message {
-            if ev_id != id {
-                return ().into();
-            };
-
-            self.size = size;
-        }
-
-        if let Message::OpenPlaylist = message {
-            // Open playlist file
-            let file = FileDialog::new()
-                .add_filter("Playlist", &["m3u", "m3u8"])
-                .add_filter("Any(*)", &["*"])
-                .set_title("Select playlist file")
-                .set_directory(dirs::audio_dir().unwrap_or(dirs::home_dir().unwrap_or(PathBuf::from("."))))
-                .pick_file();
-
-            if file.is_some()  {
-                println!("Selected file: {:?}", file);
-                let playlist = load_tag_data_from_m3u(&file.unwrap());
-            }
-        }
-
-        ().into()
-    }
-
-    fn view(&self) -> Element<Message> {
+impl ConfigWindow {
+    pub fn view(&self, state: &DanceInterpreter) -> Element<Message> {
         let menu_tpl_1 = |items| Menu::new(items).max_width(150.0).offset(15.0).spacing(5.0);
         let mb = menu_bar!(
             (button(
@@ -116,10 +84,4 @@ impl Window for ConfigWindow {
 
         mb.into()
     }
-
-    fn theme(&self) -> Theme {
-        Theme::default()
-    }
 }
-
-impl ConfigWindow {}
