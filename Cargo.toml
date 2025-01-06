@@ -2,7 +2,7 @@
 name = "danceinterpreter-v4"
 description = "Danceinterpreter v4"
 license = "GPL-3.0-or-later"
-version = "0.0.1"
+version = "0.1.0"
 edition = "2021"
 authors = ["Klassenserver7b <klassenserver7bwin10@gmail.com>", "Konsl <82901383+Konsl@users.noreply.github.com>, Robocraft999 <59525378+Robocraft999@users.noreply.github.com>"]
 
@@ -10,10 +10,8 @@ authors = ["Klassenserver7b <klassenserver7bwin10@gmail.com>", "Konsl <82901383+
 id3 = "1.13.1"
 url = "2.5.2"
 percent-encoding = "2.3.1"
-iced = { version = "0.13.1", features = ["image", "default", "debug", "multi-window" , "svg", "lazy", "async-std"]}
-iced_aw = "0.11.0"
-dark-light = "=1.0.0"
-bytes = "1.7.1"
+iced = { version = "0.13.1", features = ["image", "default", "debug", "multi-window" , "svg", "lazy", "async-std", "canvas"]}
+iced_aw = { version = "0.11.0", features = ["default"] }
 rfd = "0.15.1"
 dirs = "5.0.1"
 

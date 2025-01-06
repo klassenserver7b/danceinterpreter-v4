@@ -1,1 +1,1 @@
-pub mod playlist_dataprovider;
+pub mod song_data_provider;

@@ -1,5 +1,5 @@
-use crate::{DanceInterpreter, Message};
 use crate::Window;
+use crate::{DanceInterpreter, Message};
 use iced::alignment::{Horizontal, Vertical};
 use iced::widget::text::LineHeight;
 use iced::widget::{column, horizontal_space, image, row, stack, Text};
@@ -9,6 +9,9 @@ use iced::{window, Element, Length};
 pub struct SongWindow {
     pub id: Option<window::Id>,
     pub size: Size,
+
+    pub enable_image: bool,
+    pub enable_next_dance: bool,
 }
 
 impl Window for SongWindow {
@@ -26,13 +29,15 @@ impl Default for SongWindow {
         Self {
             id: None,
             size: Size::new(1.0, 1.0),
+            enable_image: true,
+            enable_next_dance: true,
         }
     }
 }
 
 impl SongWindow {
-    pub fn view(&self, state: &DanceInterpreter) -> Element<Message> {
-        let Some(song_info) = state.song_info.as_ref() else {
+    pub fn view(&self, state: &DanceInterpreter) -> Element<'_, Message> {
+        let Some(song_info) = state.data_provider.get_current_song_info() else {
             return horizontal_space().into();
         };
 
@@ -59,11 +64,15 @@ impl SongWindow {
         ]
         .spacing(song_spacing);
 
-        let row_bottom = (if let Some(image_handle) = song_info.album_art.as_ref() {
-            row![
-                image(image_handle).height(cover_height),
-                column_title_artist
-            ]
+        let row_bottom = (if self.enable_image {
+            if let Some(image_handle) = song_info.album_art.as_ref() {
+                row![
+                    image(image_handle).height(cover_height),
+                    column_title_artist
+                ]
+            } else {
+                row![column_title_artist]
+            }
         } else {
             row![column_title_artist]
         })
@@ -77,16 +86,20 @@ impl SongWindow {
             .align_x(Horizontal::Center)
             .spacing(dance_spacing);
 
-        (if let Some(next_song_info) = state.next_song_info.as_ref() {
-            stack![
-                column_center,
-                Text::new(next_song_info.dance.to_owned())
-                    .size(next_dance_size)
-                    .width(Length::Fill)
-                    .height(Length::Fill)
-                    .align_x(Horizontal::Right)
-                    .align_y(Vertical::Bottom)
-            ]
+        (if self.enable_next_dance {
+            if let Some(next_song_info) = state.data_provider.get_next_song_info() {
+                stack![
+                    column_center,
+                    Text::new(next_song_info.dance.to_owned())
+                        .size(next_dance_size)
+                        .width(Length::Fill)
+                        .height(Length::Fill)
+                        .align_x(Horizontal::Right)
+                        .align_y(Vertical::Bottom)
+                ]
+            } else {
+                stack![column_center]
+            }
         } else {
             stack![column_center]
         })
