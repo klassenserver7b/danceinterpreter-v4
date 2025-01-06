@@ -1,8 +1,8 @@
 on:
   push:
-    branches: [ "dev" ]
+    branches: [ "main", "dev", "iced-gui" ]
   pull_request:
-    branches: [ "main", "dev" ]
+    branches: [ "main", "dev", "iced-gui" ]
 
 name: CI
 

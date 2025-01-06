@@ -9,9 +9,9 @@ on:
 permissions: write-all
 
 env:
-  BIN_NAME: danceinterpreter-v4
-  PROJECT_NAME: danceinterpreter-v4
-  REPO_NAME: klassenserver7b/danceinterpreter-v4
+  BIN_NAME: danceinterpreter-rs
+  PROJECT_NAME: danceinterpreter-rs
+  REPO_NAME: klassenserver7b/danceinterpreter-rs
   BREW_TAP: jondot/homebrew-tap
 
 jobs:
@@ -131,7 +131,7 @@ jobs:
     needs: [ dist ]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4.1.7
         # with:
         #   path: dist
       # - run: ls -al ./dist
