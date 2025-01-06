@@ -8,7 +8,7 @@ authors = ["Klassenserver7b <klassenserver7bwin10@gmail.com>", "Konsl <82901383+
 
 [dependencies]
 id3 = "1.13.1"
-url = "2.5.2"
+url = "2.5.4"
 percent-encoding = "2.3.1"
 iced = { version = "0.13.1", features = ["image", "default", "debug", "multi-window" , "svg", "lazy", "async-std", "canvas"]}
 iced_aw = { version = "0.11.0", features = ["default"] }
