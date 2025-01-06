@@ -25,7 +25,6 @@ impl Window for ConfigWindow {
 
 impl ConfigWindow {
     pub fn view(&self, dance_interpreter: &DanceInterpreter) -> Element<'_, Message> {
-
         let menu_bar = self.build_menu_bar(dance_interpreter);
         //let playlist_view = self.build_playlist_view();
         let statics_view = self.build_statics_view(dance_interpreter);
@@ -38,9 +37,7 @@ impl ConfigWindow {
             .into()
     }
 
-    fn build_playlist_view(&self){
-
-    }
+    fn build_playlist_view(&self) {}
 
     fn build_statics_view(&self, dance_interpreter: &DanceInterpreter) -> Row<'_, Message> {
         let bold_font = Font {
@@ -49,19 +46,29 @@ impl ConfigWindow {
             stretch: font::Stretch::Normal,
             style: font::Style::Normal,
         };
-        
 
-        let boldb: Button<Message, Theme, Renderer>  = button(text("Blank").font(bold_font)).on_press(Message::Noop);
-        let mut statics: Vec<Element<_>> = dance_interpreter.data_provider.statics.iter().map(
-            |s| button(text(s.clone()).font(bold_font)).on_press(Message::Noop).into()
-        ).collect();
+        let boldb: Button<Message, Theme, Renderer> =
+            button(text("Blank").font(bold_font)).on_press(Message::Noop);
+        let mut statics: Vec<Element<_>> = dance_interpreter
+            .data_provider
+            .statics
+            .iter()
+            .map(|s| {
+                button(text(s.clone()).font(bold_font))
+                    .on_press(Message::Noop)
+                    .into()
+            })
+            .collect();
 
         statics.insert(0, boldb.into());
 
         row(statics)
     }
 
-    fn build_menu_bar(&self, dance_interpreter: &DanceInterpreter) -> MenuBar<Message, Theme, Renderer>{
+    fn build_menu_bar(
+        &self,
+        dance_interpreter: &DanceInterpreter,
+    ) -> MenuBar<Message, Theme, Renderer> {
         let menu_tpl_1 = |items| Menu::new(items).max_width(150.0).offset(15.0).spacing(5.0);
 
         #[rustfmt::skip]
@@ -145,5 +152,5 @@ fn labeled_message_checkbox(
     checkbox(label, checked)
         .on_toggle(message)
         .width(Length::Fill)
-        //.style(checkbox::secondary)
+    //.style(checkbox::secondary)
 }

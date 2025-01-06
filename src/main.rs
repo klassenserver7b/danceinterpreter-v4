@@ -208,8 +208,7 @@ impl DanceInterpreter {
             Message::FileDropped(path) => {
                 if let Ok(playlist) = load_tag_data_from_m3u(&path) {
                     self.data_provider.set_vec(playlist);
-                }
-                else if let Ok(song_info) = read_song_info_from_filepath(&path) {
+                } else if let Ok(song_info) = read_song_info_from_filepath(&path) {
                     self.data_provider
                         .set_source(SongDataSource::Other(song_info));
                 }

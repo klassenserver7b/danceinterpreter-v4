@@ -1,6 +1,5 @@
-use std::cmp::PartialEq;
 use crate::dataloading::songinfo::SongInfo;
-
+use std::cmp::PartialEq;
 
 #[derive(Default, PartialEq)]
 pub enum SongDataSource {
@@ -21,8 +20,7 @@ pub enum SongChange {
 }
 
 #[derive(Default)]
-pub struct SongDataProvider
-{
+pub struct SongDataProvider {
     pub source: SongDataSource,
     pub playlist_songs: Vec<SongInfo>,
     pub statics: Vec<String>,
