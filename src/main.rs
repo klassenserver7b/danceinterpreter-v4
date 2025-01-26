@@ -129,7 +129,6 @@ impl DanceInterpreter {
         match message {
             Message::WindowOpened(_) => ().into(),
             Message::WindowResized((window_id, size)) => {
-                println!("Window resized: {:?}, {:?}", window_id, size);
                 if self.config_window.id == Some(window_id) {
                     self.config_window.on_resize(size);
                 } else if self.song_window.id == Some(window_id) {

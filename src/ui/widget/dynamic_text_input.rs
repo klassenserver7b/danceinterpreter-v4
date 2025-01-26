@@ -91,7 +91,7 @@ where
     {
         let input = TextInput::new(&placeholder, &value).padding(0);
 
-        let mut label = if !value.is_empty() {
+        let label = if !value.is_empty() {
             Text::new(value.to_owned()).wrapping(Wrapping::None)
         } else {
             Text::new(placeholder.to_owned())

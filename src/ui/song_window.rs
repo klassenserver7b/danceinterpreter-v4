@@ -36,7 +36,7 @@ impl Default for SongWindow {
 }
 
 impl SongWindow {
-    pub fn view(&self, state: &DanceInterpreter) -> Element<'_, Message> {
+    pub fn view<'a>(&self, state: &'a DanceInterpreter) -> Element<'a, Message> {
         let Some(song_info) = state.data_provider.get_current_song_info() else {
             return horizontal_space().into();
         };
@@ -53,14 +53,14 @@ impl SongWindow {
             + song_spacing
             + LineHeight::default().to_absolute(artist_size.into());
 
-        let text_dance = Text::new(song_info.dance.to_owned())
+        let text_dance = Text::new(&song_info.dance)
             .size(dance_size)
             .height(Length::Fill)
             .align_y(Vertical::Bottom);
 
         let column_title_artist = column![
-            Text::new(song_info.title.to_owned()).size(title_size),
-            Text::new(song_info.artist.to_owned()).size(artist_size),
+            Text::new(&song_info.title).size(title_size),
+            Text::new(&song_info.artist).size(artist_size),
         ]
         .spacing(song_spacing);
 
@@ -90,7 +90,7 @@ impl SongWindow {
             if let Some(next_song_info) = state.data_provider.get_next_song_info() {
                 stack![
                     column_center,
-                    Text::new(next_song_info.dance.to_owned())
+                    Text::new(&next_song_info.dance)
                         .size(next_dance_size)
                         .width(Length::Fill)
                         .height(Length::Fill)
