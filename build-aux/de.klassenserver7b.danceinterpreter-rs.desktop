@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Danceinterpreter-RS
+Comment=Danceinterpreter
+Type=Application
+# should be the same as the Cargo project name
+Exec=danceinterpreter-rs
+Terminal=false
+Categories=Utility;Rust;iced
+Keywords=Rust;Flatpak;
+Icon=de.klassenserver7b.danceinterpreter-rs
+StartupNotify=true

@@ -1,8 +1,7 @@
-use std::cmp::PartialEq;
 use crate::dataloading::songinfo::SongInfo;
+use std::cmp::PartialEq;
 
-
-#[derive(Default, PartialEq)]
+#[derive(Default, Debug, PartialEq, Clone)]
 pub enum SongDataSource {
     #[default]
     Blank,
@@ -19,13 +18,19 @@ pub enum SongChange {
     Previous,
     Next,
 }
+#[derive(Debug, Clone)]
+pub enum SongDataEdit {
+    Title(String),
+    Artist(String),
+    Dance(String),
+}
 
 #[derive(Default)]
-pub struct SongDataProvider
-{
+pub struct SongDataProvider {
     pub source: SongDataSource,
     pub playlist_songs: Vec<SongInfo>,
     pub statics: Vec<String>,
+    pub next: Option<SongDataSource>,
 }
 
 impl SongDataProvider {
@@ -48,11 +53,20 @@ impl SongDataProvider {
         }
     }
     pub fn get_next_song_info(&self) -> Option<&SongInfo> {
+        if let Some(next) = self.next.as_ref() {
+            return match next {
+                SongDataSource::Static(_) => None, //TODO: return static song info
+                SongDataSource::Playlist(i) => self.playlist_songs.get(*i),
+                SongDataSource::Other(ref song) => Some(song),
+                SongDataSource::Blank => None,
+            }
+        }
+        
         match self.source {
-            SongDataSource::Static(_) => None,
+            SongDataSource::Static(_) => None, //TODO: return static song info
             SongDataSource::Playlist(i) => self.playlist_songs.get(i + 1),
+            SongDataSource::Other(ref song) => Some(song),
             SongDataSource::Blank => None,
-            SongDataSource::Other(_) => None,
         }
     }
 
@@ -69,6 +83,11 @@ impl SongDataProvider {
     }
 
     pub fn next(&mut self) {
+        if let Some(next) = self.next.take() {
+            self.source = next;
+            return;
+        }
+        
         let SongDataSource::Playlist(current_index) = self.source else {
             return;
         };
@@ -95,6 +114,14 @@ impl SongDataProvider {
             _ => self.source = n,
         }
     }
+    
+    pub fn set_next(&mut self, next: SongDataSource) {
+        self.next = Some(next);
+    }
+
+    pub fn append_song(&mut self, song: SongInfo) {
+        self.playlist_songs.push(song);
+    }
 
     pub fn handle_song_change(&mut self, change: SongChange) {
         match change {
@@ -112,6 +139,22 @@ impl SongDataProvider {
             }
             SongChange::Next => {
                 self.next();
+            }
+        }
+    }
+    
+    pub fn handle_song_data_edit(&mut self, i: usize, edit: SongDataEdit) {
+        if let Some(song) = self.playlist_songs.get_mut(i) {
+            match edit {
+                SongDataEdit::Title(title) => {
+                    song.title = title;
+                }
+                SongDataEdit::Artist(artist) => {
+                    song.artist = artist;
+                }
+                SongDataEdit::Dance(dance) => {
+                    song.dance = dance;
+                }
             }
         }
     }
