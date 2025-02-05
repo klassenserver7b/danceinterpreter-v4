@@ -4,7 +4,7 @@ use iced::advanced::widget::{tree, Operation, Tree};
 use iced::advanced::{layout, mouse, overlay, renderer, text, Clipboard, Layout, Shell, Widget};
 use iced::keyboard::key::Named;
 use iced::keyboard::Key;
-use iced::widget::text::LineHeight;
+use iced::widget::text::{LineHeight, Shaping};
 use iced::widget::{text_input, Text, TextInput};
 use iced::{alignment, keyboard, Color, Event, Length, Pixels, Rectangle, Size, Vector};
 
@@ -92,10 +92,13 @@ where
         let input = TextInput::new(&placeholder, &value).padding(0);
 
         let label = if !value.is_empty() {
-            Text::new(value.to_owned()).wrapping(Wrapping::None)
+            Text::new(value.to_owned())
+                .wrapping(Wrapping::None)
+                .shaping(Shaping::Advanced)
         } else {
             Text::new(placeholder.to_owned())
                 .wrapping(Wrapping::None)
+                .shaping(Shaping::Advanced)
                 .style(|theme| iced::widget::text::Style {
                     color: Some(get_placeholder_color(theme)),
                 })

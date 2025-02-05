@@ -1,5 +1,6 @@
 use crate::Window;
 use crate::{DanceInterpreter, Message};
+use iced::advanced::text::Shaping;
 use iced::alignment::{Horizontal, Vertical};
 use iced::widget::text::LineHeight;
 use iced::widget::{column, horizontal_space, image, row, stack, Text};
@@ -56,11 +57,16 @@ impl SongWindow {
         let text_dance = Text::new(&song_info.dance)
             .size(dance_size)
             .height(Length::Fill)
-            .align_y(Vertical::Bottom);
+            .align_y(Vertical::Bottom)
+            .shaping(Shaping::Advanced);
 
         let column_title_artist = column![
-            Text::new(&song_info.title).size(title_size),
-            Text::new(&song_info.artist).size(artist_size),
+            Text::new(&song_info.title)
+                .size(title_size)
+                .shaping(Shaping::Advanced),
+            Text::new(&song_info.artist)
+                .size(artist_size)
+                .shaping(Shaping::Advanced),
         ]
         .spacing(song_spacing);
 
@@ -96,6 +102,7 @@ impl SongWindow {
                         .height(Length::Fill)
                         .align_x(Horizontal::Right)
                         .align_y(Vertical::Bottom)
+                        .shaping(Shaping::Advanced)
                 ]
             } else {
                 stack![column_center]

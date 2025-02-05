@@ -2,16 +2,17 @@ mod dataloading;
 mod macros;
 mod ui;
 
-use crate::dataloading::dataprovider::song_data_provider::{
-    SongChange, SongDataProvider, SongDataSource,
-};
+use crate::dataloading::dataprovider::song_data_provider::{SongChange, SongDataEdit, SongDataProvider, SongDataSource};
 use crate::dataloading::id3tagreader::read_song_info_from_filepath;
 use crate::dataloading::m3uloader::load_tag_data_from_m3u;
+use crate::dataloading::songinfo::SongInfo;
 use crate::ui::config_window::ConfigWindow;
 use crate::ui::song_window::SongWindow;
+use iced::advanced::graphics::image::image_rs::ImageFormat;
 use iced::keyboard::key::Named;
 use iced::keyboard::{on_key_press, Key, Modifiers};
 use iced::widget::horizontal_space;
+use iced::window::icon::from_file_data;
 use iced::{exit, window, Element, Size, Subscription, Task, Theme};
 use rfd::FileDialog;
 use std::path::PathBuf;
@@ -36,7 +37,6 @@ pub trait Window {
 struct DanceInterpreter {
     config_window: ConfigWindow,
     song_window: SongWindow,
-
     data_provider: SongDataProvider,
 }
 
@@ -52,8 +52,11 @@ pub enum Message {
     SetFullscreen(bool),
 
     OpenPlaylist,
+    AddSong(SongInfo),
     FileDropped(PathBuf),
     SongChanged(SongChange),
+    SongDataEdit(usize, SongDataEdit),
+    SetNextSong(SongDataSource),
 
     EnableImage(bool),
     EnableNextDance(bool),
@@ -63,12 +66,19 @@ impl DanceInterpreter {
     pub fn new() -> (Self, Task<Message>) {
         let mut tasks = Vec::new();
 
+        let icon = from_file_data(match dark_light::detect().unwrap_or(dark_light::Mode::Unspecified) {
+            dark_light::Mode::Dark => include_bytes!(res_file!("icon_dark.png")),
+            _ => include_bytes!(res_file!("icon_light.png")),
+        }, Some(ImageFormat::Png)).ok();
+
         let (config_window, cw_opened) = Self::open_window(window::Settings {
             platform_specific: Self::get_platform_specific(),
+            icon: icon.clone(),
             ..Default::default()
         });
         let (song_window, sw_opened) = Self::open_window(window::Settings {
             platform_specific: Self::get_platform_specific(),
+            icon: icon.clone(),
             ..Default::default()
         });
 
@@ -208,8 +218,7 @@ impl DanceInterpreter {
                 if let Ok(playlist) = load_tag_data_from_m3u(&path) {
                     self.data_provider.set_vec(playlist);
                 } else if let Ok(song_info) = read_song_info_from_filepath(&path) {
-                    self.data_provider
-                        .set_source(SongDataSource::Other(song_info));
+                    self.data_provider.append_song(song_info);
                 }
 
                 ().into()
@@ -217,6 +226,21 @@ impl DanceInterpreter {
 
             Message::SongChanged(song_change) => {
                 self.data_provider.handle_song_change(song_change);
+                ().into()
+            }
+
+            Message::SongDataEdit(i, edit) => {
+                self.data_provider.handle_song_data_edit(i, edit);
+                ().into()
+            }
+
+            Message::AddSong(song) => {
+                self.data_provider.append_song(song);
+                ().into()
+            }
+
+            Message::SetNextSong(i) => {
+                self.data_provider.set_next(i);
                 ().into()
             }
 
@@ -229,6 +253,7 @@ impl DanceInterpreter {
                 self.song_window.enable_next_dance = state;
                 ().into()
             }
+
             _ => ().into(),
         }
     }
